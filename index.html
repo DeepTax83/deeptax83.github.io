@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>게이 — AI x Data Portfolio (Tabbed)</title>
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --fg: #e6e6e6;
+      --muted: #a0a0a0;
+      --accent: #7c3aed;
+      --card: #11151f;
+      --chip: #1b2030;
+      --border: #232838;
+      --elev: rgba(0,0,0,0.25);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--fg);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Apple SD Gothic Neo, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    a { color: var(--fg); text-decoration: none; border-bottom: 1px dashed var(--border); }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 18px 56px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+    header { grid-column: 1 / -1; margin-bottom: 4px; display:flex; align-items:center; justify-content: space-between; }
+    .brand { font-weight: 800; font-size: 22px; letter-spacing: 0.2px; }
+    .tagline { font-size: 14px; color: var(--muted); }
+    .btn { padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px; background: transparent; color: var(--fg); cursor: pointer; }
+    .btn:hover { border-color: var(--fg); }
+    .side { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; position: sticky; top: 16px; height: max-content; }
+    .avatar { width: 100%; aspect-ratio: 1/1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .contact { margin-top: 16px; display: grid; gap: 8px; font-size: 14px; }
+    .chip { display:inline-block; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; margin: 4px 6px 0 0; font-size: 12px; color: #cfd3e3; }
+
+    /* Tabs */
+    .tabs { position: sticky; top: 0; z-index: 10; background: linear-gradient(180deg, rgba(11,14,20,0.95), rgba(11,14,20,0.85)); backdrop-filter: blur(6px);
+      padding: 8px; border: 1px solid var(--border); border-radius: 14px; display: flex; gap: 6px; }
+    .tab-btn { flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: #0f1421; color: var(--fg); cursor: pointer; font-weight: 600; font-size: 14px; }
+    .tab-btn[aria-selected="true"] { background: var(--accent); border-color: var(--accent); }
+    .tab-panel { display: none; margin-top: 12px; }
+    .tab-panel[aria-hidden="false"] { display: block; }
+
+    /* Sections & Cards */
+    section { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; }
+    h1, h2, h3 { margin: 0 0 10px; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 18px; color: #c9cbda; }
+    p { margin: 6px 0 12px; color: #d9d9d9; line-height: 1.6; }
+    ul { margin: 0; padding-left: 18px; color: #d9d9d9; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 18px var(--elev); }
+    .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--border); padding: 8px 0; }
+    .row:last-child { border-bottom: 0; }
+    .meta { color: var(--muted); font-size: 13px; }
+    .pill { font-size: 12px; background: #161b27; border: 1px solid var(--border); padding: 3px 8px; border-radius: 999px; margin-left: 8px; }
+
+    /* Accordions */
+    details.project { border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px; background: #0f1320; }
+    details.project + details.project { margin-top: 10px; }
+    details.project summary { cursor: pointer; list-style: none; display:flex; align-items:center; gap: 8px; }
+    details.project summary::-webkit-details-marker { display:none; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #1b2030; border: 1px solid var(--border); color:#cfd3e3; }
+    .caret { width: 10px; height: 10px; display:inline-block; transform: rotate(-90deg); transition: transform .15s ease; border: solid #cfd3e3; border-width: 0 2px 2px 0; padding: 2px; }
+    details[open] .caret { transform: rotate(45deg); }
+
+    /* Links list */
+    .link-list li { margin: 8px 0; }
+
+    footer { grid-column: 1 / -1; text-align: center; color: var(--muted); margin-top: 8px; font-size: 12px; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .wrap { grid-template-columns: 1fr; }
+      .tabs { position: static; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+
+    /* Print: expand everything */
+    @media print {
+      :root { --bg:#fff; --fg:#000; --muted:#555; --card:#fff; --chip:#efefef; --border:#ddd; }
+      .wrap { padding: 0; gap: 12px; }
+      .tabs, .btn { display: none !important; }
+      .side { position: static; }
+      a { border-bottom: none; }
+      body { background: #fff; color: #000; }
+      .tab-panel { display: block !important; }
+      details.project { border-color: #ddd; background: #fff; }
+      details.project[open] summary { font-weight: 700; }
+    }
+  
+    /* === Style Upgrade Pack (paste at end of <style>) === */
+
+    /* 색 변수 보강 */
+    :root{
+      --bg: #0a0f1a;             /* 더 딥한 남청색 배경 */
+      --card: #0e1526;           /* 카드 톤 다운 */
+      --border: #1f2942;         /* 테두리 컬러 통일 */
+      --accent: #7c3aed;         /* 메인 포인트 */
+      --accent-2: #8b5cf6;       /* 그라데이션 상단색 */
+      --ring: rgba(139,92,246,.55);
+      --elev: rgba(0,0,0,.35);
+      --fg-mid: color-mix(in oklab, var(--fg) 65%, var(--muted) 35%);
+    }
+    @supports not (color: color-mix(in oklab, white 50%, black 50%)){
+      :root{ --fg-mid:#c7c7c7; }
+    }
+
+    /* 타이포/간격 정리 */
+    header { margin-bottom: 10px; }
+    .brand { font-size: 24px; letter-spacing: .1px; }
+    .tagline { opacity: .8; }
+    p, ul { max-width: 74ch; } /* 줄 길이 제한으로 가독성↑ */
+    h1 { font-size: 28px; letter-spacing: -.2px; }
+    h2 { font-size: 18px; color: #d1d4e6; }
+
+    /* 링크: 밑줄 대신 컬러 페이드 */
+    a { border-bottom: none; opacity: .92; transition: opacity .15s, color .15s; }
+    a:hover { opacity: 1; color: #fff; }
+
+    /* 좌측 사이드/카드: 유리감 + 내부 하이라이트 */
+    .side, section, .card, details.project{
+      background: linear-gradient(180deg, #111a33, #0e1526);
+      border: 1px solid var(--border);
+      box-shadow:
+        0 10px 28px var(--elev),
+        inset 0 1px 0 rgba(255,255,255,.04); /* 상단 내측 하이라이트 */
+      border-radius: 18px;
+    }
+    .card:hover{ transform: translateY(-3px); box-shadow: 0 14px 30px var(--elev); }
+
+    /* 탭: 세그먼트 버튼 느낌 */
+    .tabs{
+      background: transparent;
+      border: 0;
+      gap: 10px;
+      padding: 0;
+    }
+    .tab-btn{
+      background: rgba(124,58,237,.12);
+      border: 1px solid #261e3e;
+      color: #dcdcf5;
+      border-radius: 12px;
+      padding: 12px 14px;
+      transition: transform .12s, box-shadow .12s, background .12s, border-color .12s;
+    }
+    .tab-btn:hover{ transform: translateY(-1px); border-color: var(--accent); }
+    .tab-btn[aria-selected="true"]{
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 10px 22px rgba(124,58,237,.35);
+    }
+
+    /* 프로필 문단 톤 단계(그라데이션 느낌) */
+    #panel-overview > section:first-of-type p:nth-of-type(1){ color: var(--fg); }
+    #panel-overview > section:first-of-type p:nth-of-type(2){ color: var(--fg-mid); }
+    #panel-overview > section:first-of-type p:nth-of-type(3){ color: var(--muted); }
+
+    /* 프로젝트 아코디언 더 또렷하게 */
+    details.project{ background: linear-gradient(180deg,#121a35,#0f162b); }
+    details.project summary{ font-weight: 600; }
+    .badge{ background: #1a2140; border-color: #283155; }
+
+    /* 표/행 구분선 톤다운 */
+    .row{ border-bottom: 1px dashed rgba(255,255,255,.06); }
+    .meta{ color: #aeb3c7; }
+
+    /* 버튼 */
+    .btn{
+      border-color:#2a3354;
+      background: linear-gradient(180deg,#121a35,#0f162b);
+    }
+    .btn:hover{
+      border-color:#3c4680;
+      box-shadow: 0 6px 16px rgba(0,0,0,.35), 0 0 0 3px var(--ring);
+    }
+
+    /* 아바타 테두리 더 선명하게 */
+    .avatar{ border-color:#223056; }
+
+    /* 스택 아이콘 리스트 간격/라인업 */
+    [aria-label="핵심 스택"] a{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 8px; border-radius:10px;
+      transition: background .12s;
+    }
+    [aria-label="핵심 스택"] a:hover{ background: rgba(255,255,255,.04); }
+
+    /* 모바일 보정 */
+    @media (max-width: 860px){
+    p, ul { max-width: 100%; }
+    }
+
+    /* === Mobile Vertical Scroll Override === */
+    @media (max-width: 860px){
+      .tabs { display: none !important; }
+      .tab-panel { display: block !important; margin-top: 12px; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="brand">게이 (AI x Data Portfolio)</div>
+        <div class="tagline">통계·데이터·AI로 문제를 푸는 <strong>실전형 러너</strong> — Job Buddy, mindtrip</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" onclick="window.print()">PDF로 내보내기</button>
+        <button id="expandAll" class="btn" title="모든 프로젝트 펼치기/접기">아코디언 토글</button>
+      </div>
+    </header>
+
+    <aside class="side" aria-label="사이드 정보">
+      <div class="avatar"><img src="여권.webp" alt="프로필 사진"></div>
+      <div class="contact" aria-label="연락처">
+        <div>
+          <strong>연락처</strong> · 
+          <!-- ✏️ 실제 번호로 교체: +8210XXXXXXXX / 010-XXXX-XXXX -->
+          <a href="tel:+821012345678" id="phoneLink">010-1234-5678</a>
+        </div>
+        <div>
+          <strong>이메일</strong> · 
+          <a href="mailto:newrancid@naver.com">newrancid@naver.com</a>
+        </div>
+        <div>
+          <strong>GitHub</strong> · 
+          <a href="https://github.com/DeepTax83" target="_blank" rel="noopener">DeepTax83</a>
+        </div>
+      </div>
+      <button class="btn" id="copyPhone" style="margin-top:10px; padding:6px 10px;">번호 복사</button>
+
+      <div style="margin-top:14px" aria-label="핵심 스택">
+        <a href="https://www.python.org/" target="_blank" title="Python 공식 사이트">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" 
+            alt="Python" width="28" height="28" style="vertical-align:middle;">
+          Python
+        </a><br>
+
+        <a href="https://pandas.pydata.org/" target="_blank" title="Pandas 공식 사이트">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original.svg" 
+            alt="Pandas" width="28" height="28" style="vertical-align:middle;">
+          Pandas
+        </a><br>
+
+        <a href="https://pytorch.org/" target="_blank" title="PyTorch 공식 사이트">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pytorch/pytorch-original.svg" 
+            alt="PyTorch" width="28" height="28" style="vertical-align:middle;">
+          PyTorch
+        </a><br>
+
+        <a href="https://www.tensorflow.org/" target="_blank" title="TensorFlow 공식 사이트">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/tensorflow/tensorflow-original.svg" 
+            alt="TensorFlow" width="28" height="28" style="vertical-align:middle;">
+          TensorFlow
+        </a><br>
+
+        <a href="https://www.mysql.com/" target="_blank" title="SQL (MySQL)">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" 
+            alt="SQL" width="28" height="28" style="vertical-align:middle;">
+          SQL
+        </a><br>
+
+        <a href="https://matplotlib.org/stable/gallery/index.html" target="_blank" title="EDA & Visualization">
+          <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/numpy/numpy-original.svg" 
+            alt="Visualization" width="28" height="28" style="vertical-align:middle;">
+          EDA & Visualization
+        </a>
+      </div>
+
+      <section id="qual-box" style="margin-top:14px">
+        <h2>자격·학습</h2>
+        <ul>
+          <li>빅데이터분석기사 (필기 준비 중, 2025.09 응시 예정)</li>
+          <li>정보처리기사 (준비 중)</li>
+          <li>MBC아카데미 AI X 수강 (2025)</li>
+          <li>ADsp 취득</li>
+        </ul>
+      </section>
+    </aside>
+
+    <main>
+      <!-- TABS -->
+      <nav class="tabs" role="tablist" aria-label="콘텐츠 탭">
+        <button class="tab-btn" role="tab" id="tab-overview" data-target="panel-overview" aria-controls="panel-overview" aria-selected="true">개요</button>
+        <button class="tab-btn" role="tab" id="tab-projects" data-target="panel-projects" aria-controls="panel-projects" aria-selected="false">프로젝트</button>
+        <button class="tab-btn" role="tab" id="tab-skills" data-target="panel-skills" aria-controls="panel-skills" aria-selected="false">기술 스택</button>
+        <button class="tab-btn" role="tab" id="tab-links" data-target="panel-links" aria-controls="panel-links" aria-selected="false">링크 & 하이라이트</button>
+      </nav>
+
+      <!-- PANEL: OVERVIEW -->
+      <div id="panel-overview" class="tab-panel" role="tabpanel" aria-labelledby="tab-overview" aria-hidden="false">
+        <!-- 프로필 박스 -->
+        <section>
+          <h1>프로필</h1>
+          <p>
+            통계적 사고와 엔지니어링 실행력을 결합해, 비정형 문제를 <strong>데이터 기반 제품</strong>으로 전환하는 실전형 빌더입니다.
+            요구사항 정의 → 데이터 파이프라인 설계 → LLM·규칙 하이브리드 → 대시보드/웹 UI 배포까지 <strong>끝단 납품</strong>을 목표로 합니다.
+            빅데이터분석기사 대비 학습을 바탕으로 <strong>Pandas·시각화·실험설계</strong>에 강점이 있으며, 자동화에서 <strong>재현성·표준화</strong>를 우선합니다.
+          </p>
+          <p>
+            최근 <strong>Job Buddy</strong>로 스펙 파싱–JD 태깅–서류 템플릿 엔진–인터뷰 Q/A 파이프라인을 구성해
+            <strong>서류 초안 생성 시간 약 80% 절감</strong>을 달성했고, <strong>mindtrip</strong>에선 예산·동선 제약을 반영한 일정 최적화와 지도 시각화를 구현했습니다.
+            제 작업은 <strong>문제 정의의 선명도</strong>, <strong>간결한 데이터 모델</strong>, <strong>사용자 체감 가치</strong>를 양 축으로 합니다.
+          </p>
+          <p>
+            고객 대면(영업·컨설팅) 경험을 바탕으로 요구사항을 데이터 문제로 재정의하고, 가설–실험–검증 루프를 빠르게 돌립니다.
+            현재는 Job Buddy·mindtrip의 제품 완성도와 안정적 배포/운영(로깅·모니터링·재현성)에 집중하고 있습니다.
+          </p>
+          <ul>
+            <li><strong>핵심 역량</strong> · 문제 구조화, 데이터 모델링(파생지표/스키마), 실험·평가 설계, LLM 파이프라인, 대시보드/웹 배포</li>
+            <li><strong>스택</strong> · Python, Pandas, NumPy, Matplotlib, SQL(SQLite/MySQL), PyTorch, TensorFlow(GPU), Git/GitHub</li>
+            <li><strong>일하는 방식</strong> · 문서 우선(요구사항/실험노트/README), 템플릿화·자동화, 성능보다 <em>일관성/재현성</em> 우선</li>
+          </ul>
+        </section>
+
+      <!-- 하단 2분할 박스 -->
+      <div id="softlang" class="grid2" style="margin-top:12px;">
+        <!-- 소프트 스킬 -->
+        <section class="equalize">
+          <h2>소프트 스킬</h2>
+          <ul>
+            <li>데이터 기반 문제 정의 & 해결</li>
+            <li>이해관계자 커뮤니케이션 (영업·컨설팅 경험 기반 설득)</li>
+            <li>비즈니스 니즈 → 데이터 문제로 재해석</li>
+            <li>빠른 러닝 커브와 실행 중심 마인드</li>
+          </ul>
+        </section>
+
+      <!-- 언어 능력 -->
+        <section class="equalize">
+          <h2>언어 능력</h2>
+          <ul>
+            <li>영어 — 중급</li>
+            <li>러시아어 — 초급</li>
+          </ul>
+        </section>
+      </div>
+      </div>
+
+
+      <!-- PANEL: PROJECTS (Accordion) -->
+      <div id="panel-projects" class="tab-panel" role="tabpanel" aria-labelledby="tab-projects" aria-hidden="true">
+        <section>
+          <h2>대표 프로젝트</h2>
+          <div class="grid2">
+            <div class="card">
+              <details class="project">
+                <summary>
+                  <span class="caret"></span>
+                  <h3 style="display:inline;">Job Buddy — 구직 자동화 어시스턴트</h3>
+                  <span class="pill">Python · LLM · RAG</span>
+                  <span class="badge">효율 +80%</span>
+                </summary>
+                <div style="margin-top:10px;">
+                  <p>사용자 스펙 입력 → 기업 추천 → 이력서/커버레터 자동 작성 → 인터뷰 가이드 → 최종 합격까지 파이프라인화.</p>
+                  <ul>
+                    <li>핵심: 스펙 파서, JD 태깅, 템플릿 엔진, 면접 Q/A 생성</li>
+                    <li>성과: 샘플 프로필 기준 지원서 초안 생성 시간 80% 절감</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="card">
+              <details class="project">
+                <summary>
+                  <span class="caret"></span>
+                  <h3 style="display:inline;">mindtrip — AI 여행 플래너</h3>
+                  <span class="pill">Python · Maps · Prompt</span>
+                  <span class="badge">브랜딩</span>
+                </summary>
+                <div style="margin-top:10px;">
+                  <p>취향/예산 기반 일정·예산·지도 시각화 자동 생성. 화이트 래빗 브랜드 스토리 구축.</p>
+                  <ul>
+                    <li>핵심: 일정 최적화, 예산 산출, 경로 시각화</li>
+                    <li>브랜딩: "히위고~!" 슬로건, 토끼 로고/프롬프트 셋</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+            <div class="card">
+              <details class="project">
+                <summary>
+                  <span class="caret"></span>
+                  <h3 style="display:inline;">부동산 실거래가 분석 & 지도 서비스</h3>
+                  <span class="pill">Pandas · Folium · FastAPI · Streamlit</span>
+                  <span class="badge">데이터 제품</span>
+                </summary>
+                <div style="margin-top:10px;">
+                  <p>국토부 실거래가를 정제·집계해 지역/기간별 단가·거래량을 시각화하고, 대시보드/간단 API까지 연결.</p>
+                  <ul>
+                    <li>데이터: CSV ETL → SQLite 적재, 파생지표(㎡당 단가, 분기)</li>
+                    <li>API: <code>/stats?region=…&from=…</code> 평균·중위·거래량 JSON</li>
+                    <li>지도/대시보드: Choropleth + 필터/차트</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- PANEL: SKILLS -->
+      <div id="panel-skills" class="tab-panel" role="tabpanel" aria-labelledby="tab-skills" aria-hidden="true">
+        <section>
+          <h2>기술 스택</h2>
+          <div class="row"><div>Python, Jupyter, VSCode</div><div class="meta">주력</div></div>
+          <div class="row"><div>Pandas, NumPy, Matplotlib</div><div class="meta">EDA/시각화</div></div>
+          <div class="row"><div>PyTorch, TensorFlow (GPU)</div><div class="meta">DL 실습</div></div>
+          <div class="row"><div>SQL (SQLite, MySQL 기초)</div><div class="meta">데이터 핸들링</div></div>
+          <div class="row"><div>Git, GitHub, Conda</div><div class="meta">협업/환경</div></div>
+        </section>
+      </div>
+
+      <!-- PANEL: LINKS & HIGHLIGHTS -->
+      <div id="panel-links" class="tab-panel" role="tabpanel" aria-labelledby="tab-links" aria-hidden="true">
+        <section>
+          <h2>경험 & 학습 하이라이트</h2>
+          <ul>
+            <li>판다스 집중 실습: 그룹바이, 마스킹, rank, describe, 시각화</li>
+            <li>DL 환경: CUDA 11.8 + cuDNN 8.6 조합으로 TF GPU 구동</li>
+            <li>문서화: README, 요구사항, 실험 노트 정리</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>링크</h2>
+          <ul class="link-list">
+            <li><a href="#">GitHub – 프로젝트 모음</a></li>
+            <li><a href="#">노션/블로그 – 학습 기록</a></li>
+            <li><a href="#">잡버디 데모</a></li>
+            <li><a href="#">mindtrip 데모</a></li>
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      © 2025 게이 — Last updated: 2025-09-17
+    </footer>
+  </div>
+
+  <script>
+    // Tab behavior with hash support
+    const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+    const panels = Array.from(document.querySelectorAll('.tab-panel'));
+
+    function activate(targetId, pushHash=true) {
+      buttons.forEach(btn => {
+        const active = btn.dataset.target === targetId;
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      panels.forEach(p => {
+        const show = p.id === targetId;
+        p.setAttribute('aria-hidden', show ? 'false' : 'true');
+      });
+      if (pushHash) location.hash = targetId.replace('panel-','');
+      // scroll to top of main content
+      if (pushHash) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Read hash on load (#overview/#projects/#skills/#links)
+    function initFromHash() {
+      const map = {
+        'overview': 'panel-overview',
+        'projects': 'panel-projects',
+        'skills': 'panel-skills',
+        'links': 'panel-links'
+      };
+      const key = (location.hash || '#overview').replace('#','');
+      activate(map[key] || 'panel-overview', false);
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => activate(btn.dataset.target));
+    });
+    window.addEventListener('hashchange', initFromHash);
+    initFromHash();
+
+    // Accordion expand/collapse all toggle
+    const toggleBtn = document.getElementById('expandAll');
+    toggleBtn?.addEventListener('click', () => {
+      const details = document.querySelectorAll('details.project');
+      const anyClosed = Array.from(details).some(d => !d.open);
+      details.forEach(d => d.open = anyClosed); // if any closed -> open all, else close all
+    });
+  </script>
+</body>
+</html>
