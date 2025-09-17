@@ -199,6 +199,16 @@
       .tab-panel { display: block !important; margin-top: 12px; }
     }
 
+  
+/* === Mobile Typography Fix (text overlap) === */
+p, li { overflow-wrap: anywhere; word-break: keep-all; }
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 860px){
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  p, li { line-height: 1.75; } /* more generous line-height on small screens */
+}
+
   </style>
 </head>
 <body>
