@@ -192,21 +192,15 @@
     @media (max-width: 860px){
     p, ul { max-width: 100%; }
     }
-
-    /* === Mobile Vertical Scroll Override === */
-    @media (max-width: 860px){
-      .tabs { display: none !important; }
-      .tab-panel { display: block !important; margin-top: 12px; }
-    }
-
   
-/* === Mobile Typography Fix (text overlap) === */
-p, li { overflow-wrap: anywhere; word-break: keep-all; }
-img { max-width: 100%; height: auto; }
-
+/* === Mobile Scroll Sync Fix === */
 @media (max-width: 860px){
-  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-  p, li { line-height: 1.75; } /* more generous line-height on small screens */
+  /* Sidebar should NOT be sticky on mobile */
+  .side{ position: static !important; top: auto !important; height: auto !important; }
+  /* Tabs not sticky & hidden already by your override */
+  .tabs{ position: static !important; }
+  /* Single-column layout is already handled, but enforce just in case */
+  .wrap{ grid-template-columns: 1fr !important; }
 }
 
   </style>
@@ -246,7 +240,7 @@ img { max-width: 100%; height: auto; }
       <div style="margin-top:14px" aria-label="핵심 스택">
         <a href="https://www.python.org/" target="_blank" title="Python 공식 사이트">
           <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" 
-            alt="Python" width="28" height="28" style="vertical-align:middle;">
+            lt="Python" width="28" height="28" style="vertical-align:middle;">
           Python
         </a><br>
 
