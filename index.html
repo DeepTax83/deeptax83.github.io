@@ -3,129 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>황재성 — AI x Data Portfolio (Modal Projects)</title>
+  <title>황재성 — AI x Data Portfolio</title>
   <style>
     :root {
-      --bg: #0b0e14;
-      --fg: #e6e6e6;
-      --muted: #a0a0a0;
-      --accent: #7c3aed;
-      --card: #11151f;
-      --chip: #1b2030;
-      --border: #232838;
-      --elev: rgba(0,0,0,0.25);
+      /* Mint/Aqua palette */
+      --bg: #0b1220;
+      --fg: #e9eef4;
+      --muted: #a9b4c0;
+      --accent: #22c55e;        /* mint */
+      --accent-2: #2dd4bf;      /* aqua for gradients */
+      --card: #0f172a;
+      --chip: #111b33;
+      --border: #1f2a44;
+      --elev: rgba(0,0,0,0.35);
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; background: var(--bg); color: var(--fg);
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans KR, Apple SD Gothic Neo, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
-    a { color: var(--fg); text-decoration: none; border-bottom: 1px dashed var(--border); }
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 18px 56px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
-    header { grid-column: 1 / -1; margin-bottom: 4px; display:flex; align-items:center; justify-content: space-between; }
-    .brand { font-weight: 800; font-size: 22px; letter-spacing: 0.2px; }
+    a { color: var(--fg); text-decoration: none; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 18px 64px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
+    header { grid-column: 1 / -1; margin-bottom: 6px; display:flex; align-items:center; justify-content: space-between; }
+    .brand { font-weight: 800; font-size: 24px; letter-spacing: 0.1px; }
     .tagline { font-size: 14px; color: var(--muted); }
     .btn { padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px; background: transparent; color: var(--fg); cursor: pointer; }
-    .btn:hover { border-color: var(--fg); }
-    .side { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; position: sticky; top: 16px; height: max-content; }
-    .avatar { width: 100%; max-height: 330px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); } 
+    .btn:hover { border-color: var(--accent); color: #fff; }
+    .side { background: linear-gradient(180deg, #0f172a, #0c1224); border: 1px solid var(--border); border-radius: 18px; padding: 18px; position: sticky; top: 16px; height: max-content;
+      box-shadow: 0 12px 28px var(--elev), inset 0 1px 0 rgba(255,255,255,.04); }
+    .avatar { width: 100%; max-height: 300px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background:#0e1930; display:flex; align-items:center; justify-content:center; padding: 10px; }
     .avatar img { width: 100%; height: auto; object-fit: contain; }
     .contact { margin-top: 16px; display: grid; gap: 8px; font-size: 14px; }
-    .chip { display:inline-block; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; margin: 4px 6px 0 0; font-size: 12px; color: #cfd3e3; }
+    .chip { display:inline-block; background: var(--chip); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; margin: 4px 6px 0 0; font-size: 12px; color: #cfdee9; }
+
+    /* Contact link hover/underline in green (restored) */
+    .side .contact a { cursor: pointer; color: var(--fg); text-decoration: none;
+      transition: color .15s ease, text-decoration-color .15s ease; }
+    .side .contact a:hover { color: var(--accent) !important; text-decoration: underline; text-decoration-color: var(--accent); }
+    .side .contact a:focus-visible { outline: 2px solid rgba(34,197,94,.65); outline-offset: 2px; color: var(--accent) !important;
+      text-decoration: underline; text-decoration-color: var(--accent); }
+    @media (hover: none) { .side .contact a:active { color: var(--accent) !important; } }
 
     /* Tabs */
-    .tabs { position: sticky; top: 0; z-index: 10; background: linear-gradient(180deg, rgba(11,14,20,0.95), rgba(11,14,20,0.85)); backdrop-filter: blur(6px);
+    .tabs { position: sticky; top: 0; z-index: 10; background: linear-gradient(180deg, rgba(11,18,32,0.95), rgba(11,18,32,0.75)); backdrop-filter: blur(6px);
       padding: 8px; border: 1px solid var(--border); border-radius: 14px; display: flex; gap: 6px; }
-    .tab-btn { flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
-      background: #0f1421; color: var(--fg); cursor: pointer; font-weight: 600; font-size: 14px; }
-    .tab-btn[aria-selected="true"] { background: var(--accent); border-color: var(--accent); }
+    .tab-btn { flex: 1; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(34,197,94,.10); color: #dff6e7; cursor: pointer; font-weight: 700; font-size: 14px;
+      transition: transform .12s, box-shadow .12s, background .12s, border-color .12s; letter-spacing:.1px; }
+    .tab-btn:hover { transform: translateY(-1px); border-color: var(--accent); }
+    .tab-btn[aria-selected="true"] { background: linear-gradient(180deg, var(--accent-2), var(--accent)); color: #0b1220; border-color: transparent; box-shadow: 0 10px 22px rgba(34,197,94,.35); }
     .tab-panel { display: none; margin-top: 12px; }
     .tab-panel[aria-hidden="false"] { display: block; }
 
     /* Sections & Cards */
-    section { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; }
-    h1, h2, h3 { margin: 0 0 10px; }
-    h1 { font-size: 26px; }
-    h2 { font-size: 18px; color: #c9cbda; }
-    p { margin: 6px 0 12px; color: #d9d9d9; line-height: 1.6; }
-    ul { margin: 0; padding-left: 18px; color: #d9d9d9; }
+    section { background: linear-gradient(180deg, #0f172a, #0c1224); border: 1px solid var(--border); border-radius: 18px; padding: 20px; 
+      box-shadow: 0 10px 26px var(--elev), inset 0 1px 0 rgba(255,255,255,.04); }
+    h1, h2, h3 { margin: 0 0 12px; }
+    h1 { font-size: 28px; letter-spacing: -.2px; }
+    h2 { font-size: 18px; color: #d3e6d9; }
+    p { margin: 8px 0 16px; color: #dce7f1; line-height: 1.8; }
+    ul { margin: 0; padding-left: 18px; color: #dce7f1; line-height: 1.8; }
     .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px;
-      transition: transform 0.18s ease, box-shadow 0.18s ease; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 18px var(--elev); }
+    .card { background: linear-gradient(180deg, #0f172a, #0c1224); border: 1px solid var(--border); border-radius: 16px; padding: 16px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color .18s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 18px var(--elev); border-color: var(--accent); }
     .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--border); padding: 8px 0; }
     .row:last-child { border-bottom: 0; }
     .meta { color: var(--muted); font-size: 13px; }
-    .pill { font-size: 12px; background: #161b27; border: 1px solid var(--border); padding: 3px 8px; border-radius: 999px; margin-left: 8px; }
+    .pill { font-size: 12px; background: rgba(34,197,94,.10); color:#bff3cf; border: 1px solid #1f3a2c; padding: 3px 8px; border-radius: 999px; margin-left: 8px; }
 
     /* Links list */
     .link-list li { margin: 8px 0; }
 
     footer { grid-column: 1 / -1; text-align: center; color: var(--muted); margin-top: 8px; font-size: 12px; }
 
-    /* Responsive */
-    @media (max-width: 860px) {
-      .wrap { grid-template-columns: 1fr; }
-      .tabs { position: static; }
-      .grid2 { grid-template-columns: 1fr; }
-    }
-
-    /* Print: expand everything */
-    @media print {
-      :root { --bg:#fff; --fg:#000; --muted:#555; --card:#fff; --chip:#efefef; --border:#ddd; }
-      .wrap { padding: 0; gap: 12px; }
-      .tabs, .btn { display: none !important; }
-      .side { position: static; }
-      a { border-bottom: none; }
-      body { background: #fff; color: #000; }
-      .tab-panel { display: block !important; }
-    }
-
-    /* === Style Upgrade Pack === */
-    :root{
-      --bg: #0a0f1a; --card: #0e1526; --border: #1f2942;
-      --accent: #7c3aed; --accent-2: #8b5cf6; --ring: rgba(139,92,246,.55);
-      --elev: rgba(0,0,0,.35); --fg-mid: #c7c7c7;
-    }
-    header { margin-bottom: 10px; }
-    .brand { font-size: 24px; letter-spacing: .1px; }
-    p, ul { max-width: 74ch; }
-    h1 { font-size: 28px; letter-spacing: -.2px; }
-    a { border-bottom: none; opacity: .92; transition: opacity .15s, color .15s; }
-    a:hover { opacity: 1; color: #fff; }
-    .side, section, .card{
-      background: linear-gradient(180deg, #111a33, #0e1526);
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 28px var(--elev), inset 0 1px 0 rgba(255,255,255,.04);
-      border-radius: 18px;
-    }
-    .tab-btn{
-      background: rgba(124,58,237,.12);
-      border: 1px solid #261e3e;
-      color: #dcdcf5;
-      border-radius: 12px;
-      padding: 12px 14px;
-      transition: transform .12s, box-shadow .12s, background .12s, border-color .12s;
-    }
-    .tab-btn:hover{ transform: translateY(-1px); border-color: var(--accent); }
-    .tab-btn[aria-selected="true"]{
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
-      color: #fff; border-color: transparent;
-      box-shadow: 0 10px 22px rgba(124,58,237,.35);
-    }
-
-    /* === Contact links hover/focus 강화 === */
-    .side .contact a { cursor: pointer; color: var(--fg); text-decoration: none;
-      transition: color .15s ease, text-decoration-color .15s ease; }
-    .side .contact a:hover { color: #22c55e !important; text-decoration: underline; text-decoration-color: #22c55e; }
-    .side .contact a:focus-visible { outline: 2px solid rgba(34,197,94,.65); outline-offset: 2px; color: #22c55e !important;
-      text-decoration: underline; text-decoration-color: #22c55e; }
-    @media (hover: none) { .side .contact a:active { color: #22c55e !important; } }
-
-    /* === Project Modal Popup === */
-    .project-trigger {
-      display:flex; align-items:center; gap:8px; cursor:pointer;
-    }
+    /* Modal popup (restored) */
+    .project-trigger { display:flex; align-items:center; gap:8px; cursor:pointer; }
     .project-trigger h3 { margin:0; display:inline; }
-    .project-trigger:hover { text-decoration:none; }
     .modal {
       display: none;
       position: fixed;
@@ -147,21 +99,31 @@
       animation: fadeIn .2s ease;
     }
     .modal h3 { margin-top: 0; }
-    .modal-close {
-      float: right; cursor: pointer; font-size: 22px; color: var(--muted);
-    }
+    .modal-close { float: right; cursor: pointer; font-size: 22px; color: var(--muted); }
     .modal-close:hover { color: var(--fg); }
     .modal .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 12px; }
     .modal .meta-row .pill { margin-left:0; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Responsive tweaks for modal */
-    @media (max-width: 600px){
-      .modal-content { padding: 16px; }
+    /* Responsive */
+    @media (max-width: 860px) {
+      .wrap { grid-template-columns: 1fr; }
+      .tabs { position: static; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+
+    /* Print */
+    @media print {
+      :root { --bg:#fff; --fg:#000; --muted:#555; --card:#fff; --chip:#efefef; --border:#ddd; }
+      .wrap { padding: 0; gap: 12px; }
+      .tabs, .btn { display: none !important; }
+      .side { position: static; }
+      a { border-bottom: none; }
+      body { background: #fff; color: #000; }
+      .tab-panel { display: block !important; }
     }
   </style>
 </head>
@@ -180,7 +142,7 @@
     <aside class="side" aria-label="사이드 정보">
       <div class="avatar"><img src="ID_photo.png" alt="프로필 사진"></div>
       <div class="contact" aria-label="연락처">
-        <div><strong>연락처</strong> · <a href="tel:+821012345678" id="phoneLink">010-4180-0299</a></div>
+        <div><strong>연락처</strong> · <a href="tel:+821041800299" id="phoneLink">010-4180-0299</a></div>
         <div><strong>이메일</strong> · <a href="mailto:newrancid@naver.com">newrancid@naver.com</a></div>
         <div><strong>GitHub</strong> · <a href="https://github.com/DeepTax83" target="_blank" rel="noopener">DeepTax83</a></div>
       </div>
@@ -230,16 +192,57 @@
     </aside>
 
     <main>
-      <!-- TABS -->
+      <!-- TABS (Projects first) -->
       <nav class="tabs" role="tablist" aria-label="콘텐츠 탭">
-        <button class="tab-btn" role="tab" id="tab-overview" data-target="panel-overview" aria-controls="panel-overview" aria-selected="true">개요</button>
-        <button class="tab-btn" role="tab" id="tab-projects" data-target="panel-projects" aria-controls="panel-projects" aria-selected="false">프로젝트</button>
+        <button class="tab-btn" role="tab" id="tab-projects" data-target="panel-projects" aria-controls="panel-projects" aria-selected="true">프로젝트</button>
+        <button class="tab-btn" role="tab" id="tab-overview" data-target="panel-overview" aria-controls="panel-overview" aria-selected="false">프로필</button>
         <button class="tab-btn" role="tab" id="tab-skills" data-target="panel-skills" aria-controls="panel-skills" aria-selected="false">기술 스택</button>
         <button class="tab-btn" role="tab" id="tab-links" data-target="panel-links" aria-controls="panel-links" aria-selected="false">링크 & 하이라이트</button>
       </nav>
 
+      <!-- PANEL: PROJECTS (default open) -->
+      <div id="panel-projects" class="tab-panel" role="tabpanel" aria-labelledby="tab-projects" aria-hidden="false">
+        <section>
+          <h2>대표 프로젝트</h2>
+          <div class="grid2">
+            <!-- Job Buddy -->
+            <div class="card">
+              <div class="project-trigger" data-modal="modal-jobbuddy" title="자세히 보기 (클릭)">
+                <span style="width:10px;height:10px;border:solid #cfead9;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
+                <h3>Job Buddy — 구직 자동화 어시스턴트</h3>
+                <span class="pill">Python · LLM · RAG</span>
+                <span class="pill">효율 +80%</span>
+              </div>
+              <p style="margin-top:10px;color:#d5efe1;">스펙 파싱→JD 태깅→서류 템플릿→인터뷰 Q/A까지 지원 자동화 파이프라인.</p>
+            </div>
+
+            <!-- mindtrip -->
+            <div class="card">
+              <div class="project-trigger" data-modal="modal-mindtrip" title="자세히 보기 (클릭)">
+                <span style="width:10px;height:10px;border:solid #cfead9;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
+                <h3>mindtrip — AI 여행 플래너</h3>
+                <span class="pill">Python · Maps · Prompt</span>
+                <span class="pill">브랜딩</span>
+              </div>
+              <p style="margin-top:10px;color:#d5efe1;">취향/예산 기반 일정·예산 산출과 지도 시각화, 화이트 래빗 브랜드.</p>
+            </div>
+
+            <!-- Real Estate -->
+            <div class="card">
+              <div class="project-trigger" data-modal="modal-realestate" title="자세히 보기 (클릭)">
+                <span style="width:10px;height:10px;border:solid #cfead9;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
+                <h3>부동산 실거래가 분석 & 지도 서비스</h3>
+                <span class="pill">Pandas · Folium · FastAPI · Streamlit</span>
+                <span class="pill">데이터 제품</span>
+              </div>
+              <p style="margin-top:10px;color:#d5efe1;">실거래가 정제·집계, 지표/지도 시각화, 간단 API와 대시보드.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
       <!-- PANEL: OVERVIEW -->
-      <div id="panel-overview" class="tab-panel" role="tabpanel" aria-labelledby="tab-overview" aria-hidden="false">
+      <div id="panel-overview" class="tab-panel" role="tabpanel" aria-labelledby="tab-overview" aria-hidden="true">
         <section>
           <h1>프로필</h1>
           <p>
@@ -263,7 +266,7 @@
           </ul>
         </section>
 
-        <div id="softlang" class="grid2" style="margin-top:12px;">
+        <div class="grid2" style="margin-top:12px;">
           <section class="equalize">
             <h2>소프트 스킬</h2>
             <ul>
@@ -281,47 +284,6 @@
             </ul>
           </section>
         </div>
-      </div>
-
-      <!-- PANEL: PROJECTS (Modal Triggers) -->
-      <div id="panel-projects" class="tab-panel" role="tabpanel" aria-labelledby="tab-projects" aria-hidden="true">
-        <section>
-          <h2>대표 프로젝트</h2>
-          <div class="grid2">
-            <!-- Job Buddy -->
-            <div class="card">
-              <div class="project-trigger" data-modal="modal-jobbuddy" title="자세히 보기 (클릭)">
-                <span style="width:10px;height:10px;border:solid #cfd3e3;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
-                <h3>Job Buddy — 구직 자동화 어시스턴트</h3>
-                <span class="pill">Python · LLM · RAG</span>
-                <span class="pill">효율 +80%</span>
-              </div>
-              <p style="margin-top:10px;color:#cfd3e3;">스펙 파싱→JD 태깅→서류 템플릿→인터뷰 Q/A까지 지원 자동화 파이프라인.</p>
-            </div>
-
-            <!-- mindtrip -->
-            <div class="card">
-              <div class="project-trigger" data-modal="modal-mindtrip" title="자세히 보기 (클릭)">
-                <span style="width:10px;height:10px;border:solid #cfd3e3;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
-                <h3>mindtrip — AI 여행 플래너</h3>
-                <span class="pill">Python · Maps · Prompt</span>
-                <span class="pill">브랜딩</span>
-              </div>
-              <p style="margin-top:10px;color:#cfd3e3;">취향/예산 기반 일정·예산 산출과 지도 시각화, 화이트 래빗 브랜드.</p>
-            </div>
-
-            <!-- Real Estate -->
-            <div class="card">
-              <div class="project-trigger" data-modal="modal-realestate" title="자세히 보기 (클릭)">
-                <span style="width:10px;height:10px;border:solid #cfd3e3;border-width:0 2px 2px 0;padding:2px;transform:rotate(-45deg);display:inline-block;"></span>
-                <h3>부동산 실거래가 분석 & 지도 서비스</h3>
-                <span class="pill">Pandas · Folium · FastAPI · Streamlit</span>
-                <span class="pill">데이터 제품</span>
-              </div>
-              <p style="margin-top:10px;color:#cfd3e3;">실거래가 정제·집계, 지표/지도 시각화, 간단 API와 대시보드.</p>
-            </div>
-          </div>
-        </section>
       </div>
 
       <!-- PANEL: SKILLS -->
@@ -417,7 +379,7 @@
         <span class="pill">Pandas</span>
         <span class="pill">Folium</span>
         <span class="pill">FastAPI</span>
-        <span class="pill">Streamlit</span>
+      <span class="pill">Streamlit</span>
         <span class="pill">데이터 제품</span>
       </div>
       <p>국토부 실거래가를 정제·집계해 지역/기간별 단가·거래량을 시각화하고, 대시보드와 간단 API로 제공.</p>
@@ -431,7 +393,7 @@
   </div>
 
   <script>
-    // Tab behavior with hash support
+    // Tab behavior with hash support (projects default)
     const buttons = Array.from(document.querySelectorAll('.tab-btn'));
     const panels = Array.from(document.querySelectorAll('.tab-panel'));
 
@@ -449,16 +411,16 @@
     }
 
     function initFromHash() {
-      const map = { 'overview': 'panel-overview', 'projects': 'panel-projects', 'skills': 'panel-skills', 'links': 'panel-links' };
-      const key = (location.hash || '#overview').replace('#','');
-      activate(map[key] || 'panel-overview', false);
+      const map = { 'projects': 'panel-projects', 'overview': 'panel-overview', 'skills': 'panel-skills', 'links': 'panel-links' };
+      const key = (location.hash || '#projects').replace('#','');  // default to projects
+      activate(map[key] || 'panel-projects', false);
     }
 
     buttons.forEach(btn => btn.addEventListener('click', () => activate(btn.dataset.target)));
     window.addEventListener('hashchange', initFromHash);
     initFromHash();
 
-    // === Modal open/close ===
+    // === Modal open/close (restored) ===
     const openModal = (id) => {
       const el = document.getElementById(id);
       if (!el) return;
@@ -500,7 +462,6 @@
         if (e.key === 'Escape') closeModal(m.id);
       });
     });
-
   </script>
 </body>
 </html>
